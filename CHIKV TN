@@ -18,14 +18,14 @@ lambda = 0.028
 
 # Vector storing the parameters describing the transition rates in units of years^-1
 parameters <- c(beta = 2020117,      # the infection rate, which acts on susceptibles (lambda=b *I/N)
-                gamma = 0.1439*365,     # the rate of recovery, which acts on those infected
+                gamma = 0.1439*365,     # the rate of recovery, which acts on those infected  (how did you define this?)
                 mu = 13.8/1000,           # the background mortality rate, which acts on every compartment
                 b = 6.1/1000)            # the birth rate
 
 # TIMESTEPS:
 
 # Vector storing the sequence of timesteps to solve the model at
-times <- seq(from = 0, to = 400, by = 2/400)   # from 0 to 400 YEARS in intervals of every 2 years
+times <- seq(from = 0, to = 400, by = 2/400)   # from 0 to 400 YEARS in intervals of every 2 years  (if you meant 2 years, it should be just 2. Why did you take 400 yrs time step?)
 
 # SIR MODEL FUNCTION: 
 
