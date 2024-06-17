@@ -18,14 +18,24 @@ lambda = 0.028
 
 # Vector storing the parameters describing the transition rates in units of years^-1
 parameters <- c(beta = 2020117,      # the infection rate, which acts on susceptibles (lambda=b *I/N)
+                                     # since Lambda (FOI) is a given value from your model, you should put lambda as an input parameter and make the model estimate Beta using this input parameter. 
                 gamma = 0.1439*365,     # the rate of recovery, which acts on those infected  (how did you define this?)
+                                         # gamma = 1/ (duration of recovery) --> find literature on average duration taking for recovery for chikunugnya
                 mu = 13.8/1000,           # the background mortality rate, which acts on every compartment
                 b = 6.1/1000)            # the birth rate
+
+## modified paramlist (maybe first consider w/o birth rate or mortality, just check if the model behaves correctly)
+parameters <- c(lambda = 0.028,      # the infection rate, which acts on susceptibles (lambda=b *I/N)
+                gamma = 1/10)     
+###
 
 # TIMESTEPS:
 
 # Vector storing the sequence of timesteps to solve the model at
 times <- seq(from = 0, to = 400, by = 2/400)   # from 0 to 400 YEARS in intervals of every 2 years  (if you meant 2 years, it should be just 2. Why did you take 400 yrs time step?)
+                                               # maybe better for Days for a single outbreak? (like 180 days? -> find relevent evidence on average duration days of a single outbreak)
+## modified time steps 
+times <- seq(from = 0, to = 180, by = 1)   # from 0 to 180 days by 1 day 
 
 # SIR MODEL FUNCTION: 
 
@@ -34,11 +44,11 @@ sir_model <- function(time, state, parameters) {
     
     with(as.list(c(state, parameters)), {  # tell R to look for variable names within the state and parameters objects    
         
-        
+        beta = lambda * (N / I)
         
         # The differential equations with addition of births and deaths
-        dS <- -lambda * S - mu * S + b * N            
-        dI <- lambda * S - gamma * I  - mu * I           
+        dS <- -lambda * S - mu * S + b * N              # this part should be also incorporating beta => -(beta * S * I ) / N 
+        dI <- lambda * S - gamma * I  - mu * I          # (beta * S * I) / N  - (gamma * I)   
         dR <- gamma * I - mu * R               
         
         # Return the number of people in the S, I and R compartments at each timestep 
